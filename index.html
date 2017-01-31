@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Film Search</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <script type="text/javascript" src="indexJS.js"></script>
+  </head>
+  <body id="background">
+    
+    <div id="Center_Panel">
+      
+      <h1 id="title">Find a Film</h1>
+      <p id="Site_description">Specify the type of film you want to find, and click search. 
+      </p> 
+
+      <div class="Criteria_box1">
+        <div class="Criteria_box2">
+          <div class="Criteria_box3">    
+            <div class="Specifier_box1">
+              <p class="Specifier_Heading">Genre</p>
+              <p class="Specifier_Description">
+                Select from the drop down menu the genre(s)
+                that the desired film should be classified as.
+              </p>    
+            </div>    
+            <div class="Specifier_box2">      
+              <select id="Genre_DD" name="Genre_Drop_Down" >
+                <option value="Action">Action</option>
+                <option value="Adventure">Adventure</option>
+                <option value="Animation">Animation</option>
+                <option value="Comedy">Comedy</option>
+                <option value="Crime">Crime</option>
+                <option value="Drama">Drama</option>
+                <option value="Documentary">Documentary</option>
+                <option value="Fantasy">Fantasy</option>
+                <option value="Historical">Historical</option>
+                <option value="Horror">Horror</option>
+                <option value="Mystery">Mystery</option>
+                <option value="Romance">Romance</option>
+                <option value="Science Fiction">Science Fiction</option>
+                <option value="Thriller">Thriller</option>
+                <option value="Western">Western</option>
+              </select>
+              <div id="Genre_Addition_box">
+	        <button id="Add_Genre" type="button">Add</Button>
+                <button id="Reset_Genres" type="button">Reset</Button>
+              </div>
+            
+              <div id="Selected_Genres">
+                <div class="Genre_Container">
+                  
+                </div>
+                <div class="Genre_Container">
+                  
+                </div> 
+                <div class="Genre_Container">
+                  
+                </div>
+                <div class="Genre_Container">
+                  
+                </div>
+                <div class="Genre_Container">
+                  
+                </div> 
+                <div class="Genre_Container">
+                  
+                </div>
+              </div>
+            </div>           
+          </div>
+        </div>      
+      </div>
+   
+  
+      <div class="Criteria_box1">
+        <div class="Criteria_box2">
+          <div class="Criteria_box3">
+            <div class="Specifier_box1">
+              <p class="Specifier_Heading">Actors/Actresses</p>
+              <p class="Specifier_Description">
+                Input the (first and last) names of the 
+                actors/actresses that you wish to appear in the film. 
+              </p>
+            </div>
+            <div class="Specifier_box2">
+              <input id="Actor_Input" type="text" name="Actor/Actress">
+              <div id="Actor_Addition_box">
+                <button id="Add_Actor" type="button">Add</Button>
+                <button id="Reset_Actor" type="button">Reset</Button>
+              </div>
+              <div id="Selected_Actors">
+                <div class="Actor_Container">
+                 
+                </div>
+                <div class="Actor_Container">
+                  
+                </div>
+                <div class="Actor_Container">
+                  
+                </div>
+                <div class="Actor_Container">
+                  
+                </div>
+                <div class="Actor_Container">
+                   
+                </div>
+                <div class="Actor_Container">
+                    
+                </div>
+              </div>
+ 
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="Criteria_box1_v2">
+        <div class="Criteria_box2_v2">
+          <div class="Criteria_box3_v2">           
+            <p class="Specifier_Heading2">Decade</p>           
+            <select id="Decade_Selector" name="Decade_Drop_Down" >
+              <option value="">1900s</option>
+              <option value="1910s">1910s</option>
+              <option value="1920s">1920s</option>
+              <option value="1930s">1930s</option>
+              <option value="1940s">1940s</option>
+              <option value="1950s">1950s</option>
+              <option value="1960s">1960s</option>
+              <option value="1970s">1970s</option>
+              <option value="1980s">1980s</option>
+              <option value="1990s">1990s</option>
+              <option value="2000s">2000s</option>
+              <option value="2010s">2010s</option>
+            </select>              
+            <p class="Specifier_Description2">
+               Select the desired <br >
+               decade of film release.
+            </p>
+          </div>
+        </div>
+      </div>
+
+       <div class="Criteria_box1_v2">
+        <div class="Criteria_box2_v2">
+          <div class="Criteria_box3_v2">
+            <p class="Specifier_Heading2">Length</p>
+            <select id="Length_Selector" name="Length_Drop_Down1" >
+              <option value="less_than">Less than</option>
+              <option value="greater_than">Greater than</option>
+              <option value="between">Between</option>
+            </select>
+            <p class="Specifier_Description2">
+               Specify the desired<br >
+               length of the film.
+            </p>
+            <div id="Length_Selector2">
+              <input id="LessthanInput" type="text" name="less_than_input">
+              <p class="mins">mins</p>
+              <p class="and">and</p>
+              <input id="LessthanInput1" type="text" name="less_than_input">
+              <p class="mins">mins</p>
+            </div>
+          </div>
+        </div>
+      </div>
+   
+     <div class="Criteria_box1">
+        <div class="Criteria_box2">
+          <div class="Criteria_box3">
+            <div class="Specifier_box1">
+              <p class="Specifier_Heading">Director(s)</p>
+              <p class="Specifier_Description">
+                Input the (first and last) names of the
+                film director(s).
+              </p>
+            </div>
+            <div class="Specifier_box2">
+              <input id="Director_Input" type="text" name="Actor/Actress">
+              <div id="Director_Addition_box">
+                <button id="Add_Director" type="button">Add</Button>
+                <button id="Reset_Director" type="button">Reset</Button>
+              </div>
+              <div id="Selected_Directors">
+                <div class="Actor_Container">
+
+                </div>
+                <div class="Actor_Container">
+
+                </div>
+                <div class="Actor_Container">
+
+                </div>
+                <div class="Actor_Container">
+
+                </div>
+                <div class="Actor_Container">
+
+                </div>
+                <div class="Actor_Container">
+
+                </div>
+              </div>
+
+            </div>
+          
+        </div>
+      </div>
+
+      
+      <div class="Criteria_box1">
+        <div class="Criteria_box2">
+          <div class="Criteria_box3">
+            <div class="Specifier_box1">
+              <p class="Specifier_Heading">Keywords</p>
+              <p class="Specifier_Description">
+                Input the keywords or keyphrases that 
+                describe aspects of the film.
+              </p>
+            </div>
+            <div class="Specifier_box2">
+              <input id="Keyword_Input" type="text" name="Actor/Actress">
+              <div id="Keyword_Addition_box">
+                <button id="Add_Keyword" type="button">Add</Button>
+                <button id="Reset_Keyword" type="button">Reset</Button>
+              </div>
+              <div id="Selected_Keywords">
+                <div class="Actor_Container">
+  
+                </div>
+                <div class="Actor_Container">
+
+                </div>
+                <div class="Actor_Container">
+
+                </div>
+                <div class="Actor_Container">
+
+                </div>
+                <div class="Actor_Container">
+
+                </div>
+                <div class="Actor_Container">
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="Submit-Form"> 
+        <div id="Search_box1">
+          
+            <form action="search_results.php" method="post">
+              <input id="Film_Criteria_Object" type="text" name="FilmObject">
+              <input id="Search_Button" type="submit" value="Search">
+            </form> 
+          
+        </div>
+      </div>
+
+
+      
+
+    </div>
+    
+
+  </body>
+</html>
