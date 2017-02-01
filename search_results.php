@@ -441,7 +441,7 @@
                             }
                             if ($image_found===2) {
                               $k=strlen($posterData);
-                              if (abs(($currHeight/$currWidth) - 1.5)<0.5) {
+                              if (abs(($currHeight/$currWidth) - 1.5)<0.01) {
                                 ++$image_found;
                               }                                                        
                             } 
