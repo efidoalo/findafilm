@@ -6,7 +6,8 @@
   <body id="background">
     <div id="Center_Panel">
     <?php
-      /* TMDB API can only be called 40 times every 10 seconds, if this is exceeded it returns
+      /* Request rate limitng no longer applies.
+         TMDB API can only be called 40 times every 10 seconds, if this is exceeded it returns
          status error code 25. This 40/10 s limit is IP dependent, but at the moment this code
          is running on the server regardless of user IP addr. In future if demand requires it
          the API could be called from the users machine/browser using JS. */
@@ -509,12 +510,15 @@
                                       $index = $p+12;
                                       $local_index=0;
                                       $currOverview = array();
-                                      while ( substr($results,$index , 16 )!== "\",\"release_date\"") {
+                                      while ( substr($results,$index , 14 )!== "\",\"popularity\"") {
                                         $currOverview[$local_index++] = $results[$index++];
                                       }
                                       $currOverview = implode("", $currOverview);
                                       $p=strlen($results);
                                       $currYear=array();
+                                      while ( substr($results,$index , 16 )!== "\",\"release_date\"") {
+                                        ++$index;
+                                      }
                                       $index+=18;
                                       $local_index=0;
                                       while ($results[$index]!=="-") {
