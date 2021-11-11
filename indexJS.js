@@ -10,7 +10,7 @@
 /* Function to add a genre when the Add Genre button is 
   pressed */
 function AddGenre()
-{ 
+{
   var Genre_DD_elem = document.getElementById("Genre_DD");
   var genreString = Genre_DD_elem.options[Genre_DD_elem.selectedIndex].text;
  

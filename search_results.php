@@ -2,17 +2,33 @@
   <head>
     <title>Film Search - Search Results</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
+    <script type="text/javascript" src="indexJS2.js"></script>
+	
   </head>
   <body id="background">
     <div id="Center_Panel">
-    <?php
-      /* Request rate limitng no longer applies.
-         TMDB API can only be called 40 times every 10 seconds, if this is exceeded it returns
+	<?php
+		$curr_page = 1;
+		$page_dec_key = "curr_page_dec";
+                $page_inc_key = "curr_page_inc";
+		if (array_key_exists($page_dec_key, $_POST)===true) {
+			$curr_page = intval($_POST[$page_dec_key]);
+		}
+		else if (array_key_exists($page_inc_key, $_POST)===true) {
+                        $curr_page = intval($_POST[$page_inc_key]);
+                }
+	?>
+
+      <?php
+      /* Request rate limit no longer holds 
+       * 
+       * TMDB API can only be called 40 times every 10 seconds, if this is exceeded it returns
          status error code 25. This 40/10 s limit is IP dependent, but at the moment this code
          is running on the server regardless of user IP addr. In future if demand requires it
-         the API could be called from the users machine/browser using JS. */
+	 the API could be called from the users machine/browser using JS. */
       $JSONobj_sCriteria = $_POST["FilmObject"];
-
+      //echo $JSONobj_sCriteria;	
+      //echo $JSONobj_sCriteria;      
       $genre_ids = array("Action"          => 28,
                          "Adventure"       => 12,
                          "Animation"       => 16,
@@ -102,7 +118,7 @@
       if ( $JSONobj_sCriteria[$index]==="]" ) {
         $actorExistence = 0;
       }
-      $actorCriteria; // array of genres (if genreExistence==1 )
+      $actorCriteria; // array of actors (if actorExistence==1 )
       $pos = 0;
       if ($actorExistence===1) {        
         while ( $JSONobj_sCriteria[$index]!=="]" ) {
@@ -116,14 +132,14 @@
           $local_index = 0;
           while ( $JSONobj_sCriteria[++$index]!=="\"" ) { 
             $currActor[$local_index++] = $JSONobj_sCriteria[$index];
-          }
+	  }
           $actorCriteria[$pos] = $currActor;
           ++$index;
           ++$pos;  
         }
         for ($i=0; $i<$pos; ++$i) {
           $actorCriteria[$i] = implode("", $actorCriteria[$i] );
-        }
+	}
         for ($i=0; $i<count($actorCriteria); ++$i) {
           $len = count($actorCriteria);
           for ($j=$i+1; $j<$len; ++$j) {
@@ -134,8 +150,8 @@
           $actorCriteria = array_values($actorCriteria);
         } 
       } 
-      
-
+    //  echo "actorCriteria: ";
+    //  echo print_r($actorCriteria);
       // Get decade of film release
       $decade;
       $index+=14;
@@ -272,27 +288,29 @@
       
       // set URL
       $ch = mysqli_init();
-      $conn = mysqli_connect("localhost", "id555985_diltoid", "r1d1z", "id555985_person_data");
-      mysqli_select_db($conn, "id555985_person_data");
+      $conn = mysqli_connect("localhost", "XXX", "XXX", "XXX");
+      mysqli_select_db($conn, "XXX");
       $sql = 'SELECT person_name, person_id 
-        FROM person_ids_tbl
+        FROM person_data
         WHERE person_name="';
-      $URL = "https://api.themoviedb.org/3/discover/movie?api_key=5bfb5497459e111db0d320341f304274"
-              ."&include_adult=false&page=1"
+      $URL = "https://api.themoviedb.org/3/discover/movie?api_key=XXX"
+              .("&include_adult=false&page=".$curr_page)
               .("&primary_release_data.gte=".$release_date_ge[$decade])
               .("&primary_release_date.lte=".$release_date_le[$decade]);
 
       // append actor/actress information to URL
       if ($actorExistence===1) {
-        $tempCount = 0;
-        for ($i=0; $i<count($actorCriteria); ++$i) {      
-          if (($retval = mysqli_query($conn, $sql.$actorCriteria[$i]."\"" ))!==false) {
+	$tempCount = 0;
+	for ($i=0; $i<count($actorCriteria); ++$i) {   	
+	  $query = $sql.($actorCriteria[$i])."\"";
+	  $retval = mysqli_query($conn, $query );
+	  if ( $retval !==false) {
             $res_str = (mysqli_fetch_array($retval))[1];
             if (strlen($res_str)>0) {
               if ($tempCount>0) {
                 $URL = $URL.",".$res_str;
               }
-              else {
+	      else {
                 $URL = $URL."&with_cast=".$res_str;           
               }
               ++$tempCount;
@@ -349,12 +367,40 @@
       curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
- 
+      //echo $URL;
       curl_setopt($ch, CURLOPT_URL, $URL);
       $results = curl_exec($ch);
       while (substr($results, 0, 17)==="{\"status_code\":25") {
         $results = curl_exec($ch);
       }
+      $total_pages = intval(substr($results, strpos($results, "\"total_pages\":", 0) + 14));
+?>
+	<form id="decrement_page_form" action="search_results.php" method="post">
+	<input id="Film_Criteria_Object1" type="text" name="FilmObject" value='<?php echo $_POST["FilmObject"]; ?>' >
+              <input id="page_decrement" type="text" name="curr_page_dec" 
+                     value="<?php 
+                                $decremented_page_no = $curr_page - 1;
+                                echo $decremented_page_no;      
+?>">
+	</form>
+
+	<form id="increment_page_form" action="search_results.php" method="post">
+        <input id="Film_Criteria_Object2" type="text" name="FilmObject" value='<?php echo $_POST["FilmObject"]; ?>' >
+
+                <input id="page_increment" type="text" name="curr_page_inc"
+                        value="<?php
+                                $incremented_page_no = $curr_page + 1;
+                                echo $incremented_page_no;
+                                ?>" >
+
+        </form>
+		<div id="page_selector_public_view">
+			<div id="decrement_page_button"> &#9664; </div>
+			<div id="page_number_info"><?php echo " Page: ".$curr_page."/".$total_pages." "; ?></div>
+			<div id="increment_page_button"> &#9654; </div>	
+			<p id="page_selector_buffer">test</p>
+		</div>
+<?php
 
       // get an array of movie ids (TMDB ids) that matches the specified film criteria
       $pos=0;
@@ -376,7 +422,7 @@
       }
  
     /*  // get configuration data
-      curl_setopt($ch, CURLOPT_URL, "https://api.themoviedb.org/3/configuration?api_key=5bfb5497459e111db0d320341f304274");
+      curl_setopt($ch, CURLOPT_URL, "https://api.themoviedb.org/3/configuration?api_key=XXX");
       $configs = curl_exec($ch);
       while (substr($configs, 0, 17)==="{\"status_code\":25") {
         $configs = curl_exec($ch);
@@ -395,7 +441,7 @@
                 <?php
                   unset($imageURL, $imRes,$posterData, $currHeight, $currWidth, $img_path );
                   
-                  $imageURL = "https://api.themoviedb.org/3/movie/".$IdArray[$i]."/images?api_key=5bfb5497459e111db0d320341f304274";
+                  $imageURL = "https://api.themoviedb.org/3/movie/".$IdArray[$i]."/images?api_key=XXX";
                   curl_setopt($ch, CURLOPT_URL, $imageURL);     
                   $imRes = curl_exec($ch);
                   while (substr($imRes, 0, 17)==="{\"status_code\":25") {
@@ -510,13 +556,13 @@
                                       $index = $p+12;
                                       $local_index=0;
                                       $currOverview = array();
-                                      while ( substr($results,$index , 14 )!== "\",\"popularity\"") {
+				      while ( substr($results,$index , 14 )!== "\",\"popularity\"") {
                                         $currOverview[$local_index++] = $results[$index++];
                                       }
                                       $currOverview = implode("", $currOverview);
                                       $p=strlen($results);
-                                      $currYear=array();
-                                      while ( substr($results,$index , 16 )!== "\",\"release_date\"") {
+				      $currYear=array();
+				      while ( substr($results,$index , 16 )!== "\",\"release_date\"") {
                                         ++$index;
                                       }
                                       $index+=18;
@@ -564,7 +610,7 @@
                   <?php
                     // get film runtime data 
                     $imageURL = "https://api.themoviedb.org/3/movie/"
-                        .$IdArray[$i]."?api_key=5bfb5497459e111db0d320341f304274";
+                        .$IdArray[$i]."?api_key=XXX";
                     curl_setopt($ch, CURLOPT_URL, $imageURL);
                     $Res = curl_exec($ch);
                     while (substr($Res, 0, 17)==="{\"status_code\":25") {
@@ -618,7 +664,7 @@
                   echo "People:   ";
                   $count =0;
                   $peopleURL = "https://api.themoviedb.org/3/movie/"
-                              .$IdArray[$i]."/credits?api_key=5bfb5497459e111db0d320341f304274";
+                              .$IdArray[$i]."/credits?api_key=XXX";
                   curl_setopt($ch, CURLOPT_URL, $peopleURL);
                   $res = curl_exec($ch);
                   while (substr($res, 0, 17)==="{\"status_code\":25") {

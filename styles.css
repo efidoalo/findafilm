@@ -426,10 +426,17 @@
   margin: 4px;
 }
 
-#Film_Criteria_Object {
+#Film_Criteria_Object, #Film_Criteria_Object1, #Film_Criteria_Object2, #page_decrement, #page_increment  {
   display: none;
 }
 
+#decrement_page_button, #page_number_info, #increment_page_button {
+	float: left;
+}
+
+#page_selector_buffer {
+	visibility: hidden;
+}
 /* search results page styles */
 
 .Result_box1 {
